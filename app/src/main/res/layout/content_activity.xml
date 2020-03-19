@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="@layout/activity_main">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_search"
+            />
+        <TextView
+            android:fontFamily="sans-serif-condensed"
+            android:id="@+id/detail_day_textview"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textColor="@color/white"
+            android:layout_marginTop="20dp"
+            android:text="New york"
+            android:textSize="30sp" />
+
+        <TextView
+            android:fontFamily="sans-serif-condensed"
+            android:id="@+id/detail_date_textview"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textColor="@color/grey_700"
+            android:text="Tues 2020"
+            android:textSize="16sp" />
+
+
+        <TextView
+            android:fontFamily="sans-serif-light"
+            android:id="@+id/detail_high_textview"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="6"
+            android:textSize="100sp" />
+
+        <LinearLayout
+            android:gravity="center_horizontal"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginBottom="45dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/detail_icon"
+                android:layout_width="60dp"
+                android:layout_height="50dp"
+                android:paddingEnd="16dp"
+                android:layout_gravity="bottom"
+
+
+                android:src="@drawable/ic_cloudy"/>
+
+            <TextView
+                android:id="@+id/detail_forecast_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Raining"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="3dp"
+                android:textSize="24sp"
+                android:textColor="@color/grey_700" />
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Wind" />
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textAppearance="?android:textAppearanceLarge"
+                    android:textColor="@color/grey_700"
+                    android:fontFamily="sans-serif-black"
+                    tools:text="100"/>
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="sans-serif-black"
+                    android:textAppearance="?android:textAppearanceLarge"
+                    android:textColor="@color/grey_700"
+
+                    tools:text="km/h" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pre" />
+
+                <TextView
+                    android:id="@+id/tvSize"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textAppearance="?android:textAppearanceLarge"
+                    android:textColor="@color/grey_700"
+                    android:fontFamily="sans-serif-black"
+
+                    tools:text="100"/>
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textAppearance="?android:textAppearanceLarge"
+                    android:textColor="@color/grey_700"
+                    android:fontFamily="sans-serif-black"
+
+                    tools:text="%"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Humidity" />
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textAppearance="?android:textAppearanceLarge"
+                    android:textColor="@color/grey_700"
+                    android:fontFamily="sans-serif-black"
+
+                    tools:text="45"/>
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textAppearance="?android:textAppearanceLarge"
+                    android:textColor="@color/grey_700"
+                    android:fontFamily="sans-serif-black"
+
+                    tools:text="%"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>
