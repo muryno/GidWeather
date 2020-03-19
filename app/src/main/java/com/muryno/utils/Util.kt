@@ -4,17 +4,14 @@ import android.content.Context
 import android.location.Address
 import android.location.Geocoder
 import android.net.ConnectivityManager
-import android.preference.PreferenceManager
-import android.text.format.Time
+import android.text.format.DateFormat
 import com.google.android.gms.maps.model.LatLng
 import com.muryno.MainApplication
 import com.muryno.R
 import java.io.IOException
-import java.text.DateFormat
 import java.text.SimpleDateFormat
+
 import java.util.*
-
-
 
 
 fun isOnline(): Boolean {
@@ -32,86 +29,40 @@ fun isOnline(): Boolean {
 }
 
 
-fun isMetric(context: Context): Boolean {
-    val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-    return (prefs.getString(
-        context.getString(R.string.pref_units_key),
-        context.getString(R.string.pref_units_metric)
-    )
-            == context.getString(R.string.pref_units_metric))
-}
 
 
 fun formatTemperature(
-    context: Context,
-    temperature: Double
-): String? {
-    // Data stored in Celsius by default.  If user prefers to see in Fahrenheit, convert
-    // the values here.
-    var temperature = temperature
-    val suffix = "\u00B0"
-    if (!isMetric(context)) {
-        temperature = temperature * 1.8 + 32
-    }
-
+    temperature: Double): String? {
     // For presentation, assume the user doesn't care about tenths of a degree.
-    return String.format(context.getString(R.string.format_temperature), temperature)
+    return MainApplication.instance?.getString(R.string.format_temperature)?.let { String.format(it, temperature * 1.8 + 32) }
 }
 
-fun formatDate(dateInMilliseconds: Long): String? {
-    val date = Date(dateInMilliseconds)
-    return DateFormat.getDateInstance().format(date)
-}
+
 
 // Format used for storing dates in the database.  ALso used for converting those strings
 // back into date objects for comparison/processing.
 const val DATE_FORMAT = "yyyyMMdd"
 
-/**
- * Helper method to convert the database representation of the date into something to display
- * to users.  As classy and polished a user experience as "20140102" is, we can do better.
- *
- * @param context Context to use for resource localization
- * @param dateInMillis The date in milliseconds
- * @return a user-friendly representation of the date.
- */
-fun getFriendlyDayString(
-    context: Context,
-    dateInMillis: Long
-): String? {
-    // The day string for forecast uses the following logic:
-    // For today: "Today, June 8"
-    // For tomorrow:  "Tomorrow"
-    // For the next 5 days: "Wednesday" (just the day name)
-    // For all days after that: "Mon Jun 8"
-    val time = Time()
-    time.setToNow()
-    val currentTime = System.currentTimeMillis()
-    val julianDay = Time.getJulianDay(dateInMillis, time.gmtoff)
-    val currentJulianDay = Time.getJulianDay(currentTime, time.gmtoff)
 
-    // If the date we're building the String for is today's date, the format
-    // is "Today, June 24"
-    return if (julianDay == currentJulianDay) {
-        val today = context.getString(R.string.today)
-        val formatId: Int = R.string.format_full_friendly_date
-        String.format(
-            context.getString(
-                formatId,
-                today,
-                getFormattedMonthDay(context, dateInMillis)
-            )
-        )
-    } else if (julianDay < currentJulianDay + 7) {
-        // If the input date is less than a week in the future, just return the day name.
-        getDayName(context, dateInMillis)
+
+fun getFormattedDate(smsTimeInMilis: Long): String? {
+    val smsTime = Calendar.getInstance()
+    smsTime.timeInMillis = smsTimeInMilis
+    val now = Calendar.getInstance()
+    val timeFormatString = "h:mm aa"
+    val dateTimeFormatString = "EEEE, MMMM d, h:mm aa"
+    val HOURS = 60 * 60 * 60.toLong()
+    return if (now[Calendar.DATE] == smsTime[Calendar.DATE]) {
+        "Today " + DateFormat.format(timeFormatString, smsTime)
+    } else if (now[Calendar.DATE] - smsTime[Calendar.DATE] == 1) {
+        "Yesterday " + DateFormat.format(timeFormatString, smsTime)
+    } else if (now[Calendar.YEAR] == smsTime[Calendar.YEAR]) {
+        DateFormat.format(dateTimeFormatString, smsTime).toString()
     } else {
-        // Otherwise, use the form "Mon Jun 3"
-        val shortenedDateFormat =
-            SimpleDateFormat("EEE MMM dd")
-        shortenedDateFormat.format(dateInMillis)
+        DateFormat.format("MMMM dd yyyy, h:mm aa", smsTime).toString()
     }
 }
+
 
 /**
  * Given a day, returns just the name to use for that day.
@@ -121,25 +72,20 @@ fun getFriendlyDayString(
  * @param dateInMillis The date in milliseconds
  * @return
  */
-fun getDayName(context: Context, dateInMillis: Long): String? {
-    // If the date is today, return the localized version of "Today" instead of the actual
-    // day name.
-    val t = Time()
-    t.setToNow()
-    val julianDay = Time.getJulianDay(dateInMillis, t.gmtoff)
-    val currentJulianDay =
-        Time.getJulianDay(System.currentTimeMillis(), t.gmtoff)
-    return if (julianDay == currentJulianDay) {
-        context.getString(R.string.today)
-    } else if (julianDay == currentJulianDay + 1) {
-        context.getString(R.string.tomorrow)
-    } else {
-        val time = Time()
-        time.setToNow()
-        // Otherwise, the format is just the day of the week (e.g "Wednesday".
-        val dayFormat = SimpleDateFormat("EEEE")
-        dayFormat.format(dateInMillis)
-    }
+fun getDayName( dateInMillis: Long): String? {
+    val c = Calendar.getInstance()
+
+    c.timeInMillis = dateInMillis
+    val mYear = c[Calendar.YEAR]
+    val mMonth = c[Calendar.MONTH]
+    val mDay = c[Calendar.DAY_OF_WEEK]
+    val hr = c[Calendar.HOUR]
+    val min = c[Calendar.MINUTE]
+    val sec = c[Calendar.SECOND]
+
+
+
+    return mDay.toString()
 }
 
 /**
@@ -149,31 +95,17 @@ fun getDayName(context: Context, dateInMillis: Long): String? {
  * in Utility.DATE_FORMAT
  * @return The day in the form of a string formatted "December 6"
  */
-fun getFormattedMonthDay(
-    context: Context?,
-    dateInMillis: Long
-): String? {
-    val time = Time()
-    time.setToNow()
-    val dbDateFormat =
-        SimpleDateFormat(DATE_FORMAT)
+fun getFormattedMonthDay(context: Context?, dateInMillis: Long): String? {
     val monthDayFormat = SimpleDateFormat("MMMM dd")
     return monthDayFormat.format(dateInMillis)
 }
 
-fun getFormattedWind(
-    context: Context,
-    windSpeed: Float,
-    degrees: Float
-): String? {
+fun getFormattedWind(windSpeed: Double, degrees: Float): String? {
     var windSpeed = windSpeed
-    val windFormat: Int
-    if (isMetric(context)) {
-        windFormat = R.string.format_wind_kmh
-    } else {
-        windFormat = R.string.format_wind_mph
+
+    val windFormat: Int = R.string.format_wind_kmh
         windSpeed *= .621371192237334f
-    }
+
 
     // From wind direction in degrees, determine compass direction as a string (e.g NW)
     // You know what's fun, writing really long if/else statements with tons of possible
@@ -196,7 +128,7 @@ fun getFormattedWind(
     } else if (degrees >= 292.5 && degrees < 337.5) {
         direction = "NW"
     }
-    return String.format(context.getString(windFormat), windSpeed, direction)
+    return MainApplication.instance?.getString(windFormat)?.let { String.format(it, windSpeed, direction) }
 }
 
 /**

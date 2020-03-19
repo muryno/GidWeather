@@ -25,4 +25,7 @@ class HomeViewModel : ViewModel() {
     fun postQuery(q : String){
         networkPresenter.fetchCurrentWeatherByLatLon(q)
     }
+
+
+
 }

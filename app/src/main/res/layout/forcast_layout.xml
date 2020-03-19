@@ -4,11 +4,15 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+
     android:padding="10dp"
     android:layout_margin="5dp"
+
+    tools:showIn="@layout/activity_main"
+
     android:background="@drawable/_gradient"
     xmlns:tools="http://schemas.android.com/tools">
+
 
 
         <TextView
@@ -17,10 +21,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
-            android:layout_centerHorizontal="true"
             android:textAppearance="?android:textAppearanceLarge"
-            android:textColor="@color/grey_700"
+            android:textColor="@color/white"
             android:layout_marginBottom="10dp"
+            android:layout_centerHorizontal="true"
 
             tools:text="Tues" />
         <ImageView
@@ -32,18 +36,34 @@
 
             android:layout_below="@id/txt_dat"
             android:layout_gravity="center"
-            android:src="@drawable/ic_cloudy"/>
+            android:src="@drawable/art_clouds"/>
+
         <TextView
 
+            android:id="@+id/clou_condition"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:fontFamily="sans-serif"
-            android:textColor="@color/grey_700"
+            android:textColor="@color/white"
             android:layout_marginBottom="10dp"
             android:layout_centerHorizontal="true"
 
-            android:layout_below="@id/img"
+            android:layout_below="@+id/img"
+
+            tools:text="raini" />
+        <TextView
+
+            android:id="@+id/temp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="sans-serif"
+            android:textColor="@color/white"
+            android:layout_marginBottom="10dp"
+            android:layout_centerHorizontal="true"
+
+            android:layout_below="@id/clou_condition"
 
             tools:text="9" />
 
