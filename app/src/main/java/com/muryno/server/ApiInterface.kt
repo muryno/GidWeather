@@ -10,8 +10,17 @@ interface ApiInterface {
 
 
     @GET("forecast")
-    fun getSubWeather(@Query("lat") lat: Double?,@Query("lon") lon: Double?,@Query("appid") appkey: String?): Call<SubsequenceWeatherData>
+    fun getWeatherByLatLon(@Query("lat") lat: Double?,@Query("lon") lon: Double?,@Query("appid") appkey: String?): Call<CurrentWeatherData>
+
+
+    @GET("weather")
+    fun getSubWeatherByLatLon(@Query("lat") lat: Double?,@Query("lon") lon: Double?,@Query("appid") appkey: String?): Call<SubsequenceWeatherData>
+
+
 
     @GET("forecast")
-    fun getCurrentWeather(@Query("q") q: String?,@Query("appid") appkey: String?): Call<CurrentWeatherData>
+    fun getWeatherByQueary(@Query("q") q: String?,@Query("appid") appkey: String?): Call<CurrentWeatherData>
+
+    @GET("forecast")
+    fun getSubWeatherByQueary(@Query("q") q: String?,@Query("appid") appkey: String?): Call<SubsequenceWeatherData>
 }
