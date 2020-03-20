@@ -13,7 +13,7 @@ class WeathersConverter {
     }
 
     @TypeConverter
-    fun toTruckImage(s: String?): ArrayList<Weather>? {
+    fun toWeather(s: String?): ArrayList<Weather>? {
         return try {
             Gson().fromJson<ArrayList<Weather>>(
                 s,

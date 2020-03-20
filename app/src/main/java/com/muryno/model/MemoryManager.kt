@@ -1,13 +1,11 @@
 package com.muryno.model
 
-import android.content.Intent
+import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
-
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.muryno.MainApplication
-import java.util.*
 
 
 class MemoryManager() {
@@ -20,12 +18,14 @@ class MemoryManager() {
     private val PREF_NAME = "gidi_weather_app"
     private val PREF_MODE = 0
 
+    private val SHARED_PREFS = "sharedPrefs"
+    private val KEY = "query_paramms"
 
     private val KEY_LAST_LOCATION = "last_known_location"
 
     init {
         mSharedPreferences = MainApplication.instance!!.getSharedPreferences(PREF_NAME, PREF_MODE)
-        editor= mSharedPreferences.edit()
+        editor = mSharedPreferences.edit()
     }
 
 
@@ -38,6 +38,15 @@ class MemoryManager() {
     }
 
 
+
+    fun saveData(dt : Int?) {
+        dt?.let { editor?.putInt(KEY, it) }
+        editor?.apply()
+    }
+
+    fun getQueryParamms(): Int? {
+        return mSharedPreferences.getInt(KEY, 0)
+    }
 
     fun saveLocation(latLng: LatLng?) {
         val gson = Gson()

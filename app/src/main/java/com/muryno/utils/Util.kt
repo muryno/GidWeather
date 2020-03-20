@@ -1,16 +1,12 @@
 package com.muryno.utils
 
 import android.content.Context
-import android.location.Address
-import android.location.Geocoder
 import android.net.ConnectivityManager
 import android.text.format.DateFormat
-import com.google.android.gms.maps.model.LatLng
+import android.text.format.Time
 import com.muryno.MainApplication
 import com.muryno.R
-import java.io.IOException
 import java.text.SimpleDateFormat
-
 import java.util.*
 
 
@@ -50,13 +46,13 @@ fun getFormattedDate(smsTimeInMilis: Long): String? {
     smsTime.timeInMillis = smsTimeInMilis
     val now = Calendar.getInstance()
     val timeFormatString = "h:mm aa"
-    val dateTimeFormatString = "EEEE, MMMM d, h:mm aa"
+    val dateTimeFormatString = "EE, MMMM d, h:mm aa"
     val HOURS = 60 * 60 * 60.toLong()
-    return if (now[Calendar.DATE] == smsTime[Calendar.DATE]) {
+    return if (now[Calendar.DATE] === smsTime[Calendar.DATE]) {
         "Today " + DateFormat.format(timeFormatString, smsTime)
-    } else if (now[Calendar.DATE] - smsTime[Calendar.DATE] == 1) {
+    } else if (now[Calendar.DATE] - smsTime[Calendar.DATE] === 1) {
         "Yesterday " + DateFormat.format(timeFormatString, smsTime)
-    } else if (now[Calendar.YEAR] == smsTime[Calendar.YEAR]) {
+    } else if (now[Calendar.YEAR] === smsTime[Calendar.YEAR]) {
         DateFormat.format(dateTimeFormatString, smsTime).toString()
     } else {
         DateFormat.format("MMMM dd yyyy, h:mm aa", smsTime).toString()
@@ -64,72 +60,74 @@ fun getFormattedDate(smsTimeInMilis: Long): String? {
 }
 
 
-/**
- * Given a day, returns just the name to use for that day.
- * E.g "today", "tomorrow", "wednesday".
- *
- * @param context Context to use for resource localization
- * @param dateInMillis The date in milliseconds
- * @return
- */
+
 fun getDayName( dateInMillis: Long): String? {
-    val c = Calendar.getInstance()
-
-    c.timeInMillis = dateInMillis
-    val mYear = c[Calendar.YEAR]
-    val mMonth = c[Calendar.MONTH]
-    val mDay = c[Calendar.DAY_OF_WEEK]
-    val hr = c[Calendar.HOUR]
-    val min = c[Calendar.MINUTE]
-    val sec = c[Calendar.SECOND]
-
-
-
-    return mDay.toString()
+    // If the date is today, return the localized version of "Today" instead of the actual
+    // day name.
+    val t = Time()
+    t.setToNow()
+    val julianDay = Time.getJulianDay(dateInMillis, t.gmtoff)
+    val currentJulianDay =
+        Time.getJulianDay(System.currentTimeMillis(), t.gmtoff)
+    return when (julianDay) {
+        currentJulianDay -> {
+            MainApplication.instance?.getString(R.string.today)
+        }
+        currentJulianDay + 1 -> {
+            MainApplication.instance?.getString(R.string.tomorrow)
+        }
+        else -> {
+            val time = Time()
+            time.setToNow()
+            // Otherwise, the format is just the day of the week (e.g "Wednesday".
+            val dayFormat = SimpleDateFormat("EEEE")
+            dayFormat.format(dateInMillis)
+        }
+    }
 }
 
-/**
- * Converts db date format to the format "Month day", e.g "June 24".
- * @param context Context to use for resource localization
- * @param dateInMillis The db formatted date string, expected to be of the form specified
- * in Utility.DATE_FORMAT
- * @return The day in the form of a string formatted "December 6"
- */
-fun getFormattedMonthDay(context: Context?, dateInMillis: Long): String? {
+
+fun getFriendlyDayString(
+    dateInMillis: Long
+): String? {
+    // The day string for forecast uses the following logic:
+    // For today: "Today, June 8"
+    // For tomorrow:  "Tomorrow"
+    // For the next 5 days: "Wednesday" (just the day name)
+    // For all days after that: "Mon Jun 8"
+    val time = Time()
+    time.setToNow()
+    val currentTime = System.currentTimeMillis()
+    val julianDay = Time.getJulianDay(dateInMillis, time.gmtoff)
+    val currentJulianDay = Time.getJulianDay(currentTime, time.gmtoff)
+
+    // If the date we're building the String for is today's date, the format
+    // is "Today, June 24"
+    return if (julianDay == currentJulianDay) {
+        val today = MainApplication.instance?.getString(R.string.today)
+        val formatId = R.string.format_full_friendly_date
+        String.format(
+            MainApplication.instance?.getString(formatId, today, getFormattedMonthDay( dateInMillis)
+            ).toString()
+        )
+    } else if (julianDay < currentJulianDay + 7) {
+        // If the input date is less than a week in the future, just return the day name.
+       getDayName( dateInMillis)
+    } else {
+        // Otherwise, use the form "Mon Jun 3"
+        val shortenedDateFormat =
+            SimpleDateFormat("EEE MMM dd")
+        shortenedDateFormat.format(dateInMillis)
+    }
+}
+
+
+
+fun getFormattedMonthDay( dateInMillis: Long): String? {
     val monthDayFormat = SimpleDateFormat("MMMM dd")
     return monthDayFormat.format(dateInMillis)
 }
 
-fun getFormattedWind(windSpeed: Double, degrees: Float): String? {
-    var windSpeed = windSpeed
-
-    val windFormat: Int = R.string.format_wind_kmh
-        windSpeed *= .621371192237334f
-
-
-    // From wind direction in degrees, determine compass direction as a string (e.g NW)
-    // You know what's fun, writing really long if/else statements with tons of possible
-    // conditions.  Seriously, try it!
-    var direction = "Unknown"
-    if (degrees >= 337.5 || degrees < 22.5) {
-        direction = "N"
-    } else if (degrees >= 22.5 && degrees < 67.5) {
-        direction = "NE"
-    } else if (degrees >= 67.5 && degrees < 112.5) {
-        direction = "E"
-    } else if (degrees >= 112.5 && degrees < 157.5) {
-        direction = "SE"
-    } else if (degrees >= 157.5 && degrees < 202.5) {
-        direction = "S"
-    } else if (degrees >= 202.5 && degrees < 247.5) {
-        direction = "SW"
-    } else if (degrees >= 247.5 && degrees < 292.5) {
-        direction = "W"
-    } else if (degrees >= 292.5 && degrees < 337.5) {
-        direction = "NW"
-    }
-    return MainApplication.instance?.getString(windFormat)?.let { String.format(it, windSpeed, direction) }
-}
 
 /**
  * Helper method to provide the icon resource id according to the weather condition id returned
@@ -201,23 +199,3 @@ fun getArtResourceForWeatherCondition(weatherId: Int): Int {
 
 
 
-fun getLocationAddress(location : LatLng, context: Context) : String{
-    val gcd =  Geocoder(context, Locale.getDefault())
-    var latLng =  LatLng(location.latitude, location.longitude)
-    val lng : Double= latLng.longitude
-    val  lat : Double = latLng.latitude
-    var addresses:  List<Address>?  = null
-    try {
-        addresses = gcd.getFromLocation(lat, lng, 1)
-    } catch (e : IOException) {
-        e.printStackTrace()
-    }
-    var locality : String? = null
-
-    if (addresses != null && addresses.isNotEmpty()) {
-        locality =   addresses[0].getAddressLine(0)
-    }
-
-    return locality.toString()
-
-}

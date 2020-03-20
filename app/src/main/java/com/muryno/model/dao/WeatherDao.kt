@@ -20,8 +20,8 @@ interface WeatherDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun saveCurrentWeather(weather: List<CurrentWeatherData>)
 
-    @Query("SELECT * FROM current_weather_data ORDER BY dt DESC")
-    fun getCurrentWeather(): LiveData<CurrentWeatherData>
+    @Query("SELECT * FROM current_weather_data where dt =:dt")
+    fun getCurrentWeather(dt : Int): LiveData<CurrentWeatherData>
 
 
 
@@ -34,7 +34,12 @@ interface WeatherDao {
     fun getCurrentSubWeather(): LiveData<SubsequenceWeatherData>
 
 
+    @Query("DELETE FROM subsequence_weather_data")
+    fun nukeWeather()
 
+
+    @Query("DELETE FROM current_weather_data")
+    fun nukeCurrWeather()
 
 
 }

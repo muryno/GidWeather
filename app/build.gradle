@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-
+apply plugin: 'kotlin-kapt'
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
@@ -13,6 +13,7 @@ android {
         versionCode 1
         versionName "1.0"
 
+        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -20,13 +21,11 @@ android {
 
         buildTypes {
             debug {
-                buildConfigField("String", "BASE_URL", "\"api.openweathermap.org/data/2.5/\"")
                 buildConfigField("String", "API_KEY", "\"d0308696713bb16f9990665820c29dcb\"")
             }
             release {
                 minifyEnabled false
                 proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-                buildConfigField("String", "BASE_URL", "\"api.openweathermap.org/data/2.5/\"")
                 buildConfigField("String", "API_KEY", "\"d0308696713bb16f9990665820c29dcb\"")
             }
         }
@@ -64,17 +63,23 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:4.2.2'
 
     //Room DB
-    implementation 'androidx.room:room-runtime:2.2.4'
-    implementation 'androidx.lifecycle:lifecycle-livedata:2.2.0'
-    implementation 'androidx.lifecycle:lifecycle-common-java8:2.2.0'
-    implementation 'androidx.lifecycle:lifecycle-reactivestreams:2.2.0'
-    annotationProcessor 'androidx.room:room-compiler:2.2.4'
-
+    // Extensions = ViewModel + LiveData
+    implementation "android.arch.lifecycle:extensions:1.1.1"
+    kapt "android.arch.lifecycle:compiler:1.1.1"
+// Room
+    kapt "androidx.room:room-compiler:2.2.4"
+    implementation "androidx.room:room-ktx:2.2.4"
+    implementation "androidx.room:room-rxjava2:2.2.4"
 
     //to get current locationn
+
     implementation 'com.akhgupta:android-easylocation:1.0.1'
     implementation 'com.google.android.gms:play-services-location:17.0.0'
+
+
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
 
-}
 
+
+
+}

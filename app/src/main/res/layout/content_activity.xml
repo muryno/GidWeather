@@ -11,11 +11,18 @@
         android:layout_margin="20dp"
         android:orientation="vertical">
 
-        <ImageView
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/toolbarSearchView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_search"
+            android:layout_gravity="end"
+            android:visibility="visible"
+            style="@style/SearchViewStyle"
+            android:maxWidth="4000dp"
+            android:theme="@style/SearchViewTheme"
             />
+
         <TextView
 
             android:fontFamily="sans-serif-condensed"
@@ -44,8 +51,10 @@
             android:layout_width="wrap_content"
             android:textColor="@color/white"
 
-            tools:text="6"
-            android:textSize="100sp" />
+            android:layout_marginTop="30dp"
+
+            tools:text="65456"
+            android:textSize="50sp" />
 
         <LinearLayout
             android:gravity="center_horizontal"
@@ -76,7 +85,9 @@
                 android:textSize="24sp"
                />
         </LinearLayout>
-
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"/>
 
 
         <LinearLayout
@@ -119,7 +130,7 @@
                     android:textAppearance="?android:textAppearanceLarge"
                     android:textColor="@color/white"
 
-                    tools:text="km/h" />
+                    android:text="km/h" />
 
             </LinearLayout>
 
@@ -156,7 +167,7 @@
                     android:textAppearance="?android:textAppearanceLarge"
                     android:textColor="@color/white"
 
-                    tools:text="%"/>
+                    android:text="%"/>
 
             </LinearLayout>
             <LinearLayout
@@ -195,7 +206,7 @@
                     android:textAppearance="?android:textAppearanceLarge"
                     android:textColor="@color/white"
 
-                    tools:text="%"/>
+                    android:text="%"/>
             </LinearLayout>
 
         </LinearLayout>

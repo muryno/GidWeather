@@ -3,8 +3,11 @@ package com.muryno.model.entity
 import androidx.annotation.NonNull
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import com.muryno.model.converter.CityConverter
+import com.muryno.model.converter.CoordConverter
 import java.io.Serializable
 
 
@@ -15,7 +18,7 @@ class City  : Serializable{
     @Expose
     var id: Int? = null
 
-
+    @TypeConverters(CoordConverter::class)
     @SerializedName("coord")
     @Expose
     var coord: Coord? = null

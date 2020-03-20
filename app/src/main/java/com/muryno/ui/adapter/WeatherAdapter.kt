@@ -10,10 +10,7 @@ import com.muryno.R
 import com.muryno.model.CurrentWeatherData
 
 import com.muryno.ui.interfaces.CustomItemClickListener
-import com.muryno.utils.formatTemperature
-import com.muryno.utils.getArtResourceForWeatherCondition
-import com.muryno.utils.getDayName
-import com.muryno.utils.getFormattedDate
+import com.muryno.utils.*
 import kotlinx.android.synthetic.main.forcast_layout.view.*
 
 
@@ -50,7 +47,7 @@ class WeatherAdapter( private val listener: CustomItemClickListener<CurrentWeath
         holder.clou_condition.text = weath?.weather?.get(0)?.main
 
 
-        holder.txt_dat.text = weath?.dt?.toLong()?.let { getFormattedDate(it) }
+        holder.txt_dat.text = weath?.dt?.toLong()?.let { getFriendlyDayString(it) }
 
         holder.img_icon.setImageResource(getArtResourceForWeatherCondition(weath?.weather?.get(0)?.id ?: 200))
     }

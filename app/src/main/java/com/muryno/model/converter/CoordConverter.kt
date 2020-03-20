@@ -2,20 +2,20 @@ package com.muryno.model.converter
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
-import com.muryno.model.entity.Clouds
+import com.muryno.model.entity.Coord
 import com.muryno.model.entity.Main
 
 
-class CloudsConverter {
+class CoordConverter {
     @TypeConverter
-        fun toString(source : Clouds?): String {
+        fun toString(source : Coord?): String {
         return Gson().toJson(source)
     }
 
     @TypeConverter
-    fun toCloud(s: String?): Clouds? {
+    fun toCoord(s: String?): Coord? {
         return try {
-            Gson().fromJson(s, Clouds::class.java)
+            Gson().fromJson(s, Coord::class.java)
         } catch (e: Exception) {
             null
         }

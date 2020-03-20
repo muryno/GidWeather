@@ -14,12 +14,12 @@
         android:scaleType="centerCrop"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/bck"/>
+        android:src="@drawable/bcck"/>
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/overlay_color"/>
 
     <include
-        layout="@layout/content_activity"/>
+        layout="@layout/content_details"/>
 </FrameLayout>

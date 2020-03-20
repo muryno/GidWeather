@@ -11,7 +11,7 @@
 
     <style name="AppTheme.NoActionBar.Splash">
         <item name="android:windowFullscreen">true</item>
-        <item name="android:windowBackground">@drawable/splash</item>
+        <item name="android:windowBackground">@drawable/splassh</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -19,5 +19,19 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView">
+        <item name="searchIcon">@drawable/ic_search</item>
+        <item name="queryBackground">@color/white</item>
+        <item name="searchHintIcon">@null</item>
+        <item name="queryHint">@string/search_hint</item>
+    </style>
 
+
+    <style name="SearchViewTheme" parent="Widget.AppCompat.SearchView">
+
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <string name="search_hint">search location</string>
 </resources>

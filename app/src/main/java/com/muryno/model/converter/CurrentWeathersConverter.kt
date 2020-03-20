@@ -9,14 +9,14 @@ import java.util.*
 
 class CurrentWeathersConverter {
     @TypeConverter
-    fun toString(stock: ArrayList<CurrentWeatherData>): String? {
+    fun toString(stock: ArrayList<CurrentWeatherData?>?): String? {
         return Gson().toJson(stock)
     }
 
     @TypeConverter
-    fun toCurrentWeather(s: String?):ArrayList<CurrentWeatherData>? {
+    fun toCurrentWeather(s: String?):ArrayList<CurrentWeatherData?>? {
         return try {
-            Gson().fromJson<ArrayList<CurrentWeatherData>>(
+            Gson().fromJson<ArrayList<CurrentWeatherData?>>(
                 s,
                 object : TypeToken<ArrayList<CurrentWeatherData>?>() {}.type
             )

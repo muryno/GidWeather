@@ -15,7 +15,7 @@ class RainConverter {
     }
 
     @TypeConverter
-    fun toSYS(s: String?): Rain? {
+    fun toRainn(s: String?): Rain? {
         return try {
             Gson().fromJson(s, Rain::class.java)
         } catch (e: Exception) {

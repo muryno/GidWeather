@@ -1,5 +1,6 @@
 package com.muryno.ui.base
 
+import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -20,7 +21,7 @@ import com.muryno.R
 import com.muryno.utils.isOnline
 
 
-abstract class BaseActivity : MapBaseActivity() {
+abstract class BaseActivity : AppCompatActivity() {
     internal var snackbar: Snackbar? = null
     @Volatile
     private var isOn = false

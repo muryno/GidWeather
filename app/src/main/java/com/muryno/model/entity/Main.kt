@@ -52,6 +52,6 @@ class Main  : Serializable{
 
     @SerializedName("temp_kf")
     @Expose
-    var temp_kf: Int? = null
+    var temp_kf: Double? = null
 
 }

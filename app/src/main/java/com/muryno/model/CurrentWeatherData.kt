@@ -48,7 +48,7 @@ class CurrentWeatherData  : Serializable{
 
 
     @TypeConverters(WindConverter::class)
-    @SerializedName("Wind")
+    @SerializedName("wind")
     @Expose
     var Wind: Wind? = null
 
@@ -72,7 +72,7 @@ class CurrentWeatherData  : Serializable{
     var name: String? = null
 
 
-
+    @TypeConverters(RainConverter::class)
     @SerializedName("rain")
     @Expose
     var rain: Rain? = null

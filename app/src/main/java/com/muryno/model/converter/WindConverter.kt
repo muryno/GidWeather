@@ -14,7 +14,7 @@ class WindConverter {
     }
 
     @TypeConverter
-    fun toNews(s: String?): Wind? {
+    fun toWind(s: String?): Wind? {
         return try {
             Gson().fromJson(s, Wind::class.java)
         } catch (e: Exception) {

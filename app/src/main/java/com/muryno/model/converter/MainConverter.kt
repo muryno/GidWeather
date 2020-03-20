@@ -12,7 +12,7 @@ class MainConverter {
     }
 
     @TypeConverter
-    fun toNews(s: String?): Main? {
+    fun toMain(s: String?): Main? {
         return try {
             Gson().fromJson(s, Main::class.java)
         } catch (e: Exception) {
