@@ -5,12 +5,14 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.os.Build
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.LayoutRes
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
@@ -43,7 +45,7 @@ abstract class BaseActivity : AppCompatActivity() {
         super.setContentView(layoutResID)
         view = getView()
         if (view != null) {
-            snackbar = Snackbar.make(view!!, "You are not connected to internet.. kindly on it to receive new weather update .", Snackbar.LENGTH_INDEFINITE)
+            snackbar = Snackbar.make(view!!, "You are not connected to internet..", Snackbar.LENGTH_INDEFINITE)
             val snackBarView = snackbar?.view
             snackBarView?.setBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent))
             val textView= snackBarView?.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
@@ -107,6 +109,7 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     private val broadcastReceiver = object : BroadcastReceiver() {
+        @RequiresApi(Build.VERSION_CODES.M)
         override fun onReceive(context: Context, intent: Intent) {
             if (isOnline()) {
                 snackbar?.dismiss()
