@@ -4,10 +4,16 @@ import androidx.lifecycle.LiveData
 import com.muryno.MainApplication
 import com.muryno.model.AppDatabase.Companion.getAppDataBase
 import com.muryno.model.CurrentWeatherData
+import com.muryno.model.MemoryManager
 import com.muryno.model.SubsequenceWeatherData
+import com.muryno.utils.Current_weather
 
 
 object Repository {
+
+    init {
+
+    }
 
 
     /**save current weather to local database**/
@@ -19,10 +25,11 @@ object Repository {
         }
     }
 
+
+
     /**get current weather to local database**/
-    fun getCurrentWeather(dt: Int): LiveData<CurrentWeatherData>? {
-      return  getAppDataBase()?.weatherDao()?.getCurrentWeather(dt)
-    }
+    val getWeather:  LiveData<CurrentWeatherData>?
+        get() = getAppDataBase()?.weatherDao()?.getCurrentWeather(Current_weather)
 
 
 

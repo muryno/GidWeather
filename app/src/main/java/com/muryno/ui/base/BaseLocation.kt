@@ -2,6 +2,7 @@ package com.muryno.ui.base
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -19,10 +20,9 @@ import com.muryno.MainApplication
 import com.muryno.model.MemoryManager
 import com.muryno.ui.activities.HomeActivity
 
-abstract class BaseLocation :AppCompatActivity(){
+abstract class BaseLocation :Activity(){
 
 
-    var GET_LOCATION_STATUS = false
     val PERMISSION_ID = 42
     lateinit var mFusedLocationClient: FusedLocationProviderClient
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,13 +35,12 @@ abstract class BaseLocation :AppCompatActivity(){
     }
 
 
-    @SuppressLint("MissingPermission")
     private fun getLastLocation() {
         if (checkPermissions()) {
             if (isLocationEnabled()) {
 
                 mFusedLocationClient.lastLocation.addOnCompleteListener(this) { task ->
-                    var location: Location? = task.result
+                    val location: Location? = task.result
                     if (location == null) {
                         requestNewLocationData()
                     } else {
@@ -49,11 +48,11 @@ abstract class BaseLocation :AppCompatActivity(){
                         location.longitude.toString()
 
 
+                        /**saving last location to share preferences**/
                         MemoryManager().getInstance()?.saveLocation(LatLng(  location.latitude,location.longitude))
-                        checkLocation()
 
-                        // check if location has been enable
-                        GET_LOCATION_STATUS = true
+                        /**Go to home activity**/
+                        checkLocation()
                     }
                 }
             } else {
@@ -66,16 +65,18 @@ abstract class BaseLocation :AppCompatActivity(){
         }
     }
 
-    @SuppressLint("MissingPermission")
-    private fun requestNewLocationData() {
+     fun requestNewLocationData() {
         var mLocationRequest = LocationRequest()
         mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         mLocationRequest.interval = 0
         mLocationRequest.fastestInterval = 0
+
+//        mLocationRequest.interval = 10000
+//        mLocationRequest.fastestInterval = 5000
         mLocationRequest.numUpdates = 1
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        mFusedLocationClient!!.requestLocationUpdates(
+        mFusedLocationClient.requestLocationUpdates(
             mLocationRequest, mLocationCallback,
             Looper.myLooper()
         )
@@ -87,9 +88,10 @@ abstract class BaseLocation :AppCompatActivity(){
             mLastLocation.latitude.toString()
             mLastLocation.longitude.toString()
 
-            //saving last location to share preferences
+            /**saving last location to share preferences**/
             MemoryManager().getInstance()?.saveLocation(LatLng(  mLastLocation.latitude,mLastLocation.longitude))
 
+            /**Go to home activity**/
             checkLocation()
 
         }

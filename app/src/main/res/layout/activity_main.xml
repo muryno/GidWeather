@@ -22,4 +22,9 @@
 
     <include
         layout="@layout/content_activity"/>
+
+    <include
+        android:id="@+id/progressDialog"
+        android:visibility="gone"
+        layout="@layout/progress_dialog"/>
 </FrameLayout>

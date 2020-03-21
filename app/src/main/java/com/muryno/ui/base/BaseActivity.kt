@@ -44,11 +44,11 @@ abstract class BaseActivity : AppCompatActivity() {
         view = getView()
         if (view != null) {
             snackbar = Snackbar.make(view!!, "You are not connected to internet.. kindly on it to receive new weather update .", Snackbar.LENGTH_INDEFINITE)
-            val snackBarView = snackbar!!.view
-            snackBarView.setBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent))
-            val textView= snackBarView.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
-            textView.gravity = View.TEXT_ALIGNMENT_CENTER
-            textView.setTextColor(ContextCompat.getColor(this, R.color.white))
+            val snackBarView = snackbar?.view
+            snackBarView?.setBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent))
+            val textView= snackBarView?.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
+            textView?.gravity = View.TEXT_ALIGNMENT_CENTER
+            textView?.setTextColor(ContextCompat.getColor(this, R.color.white))
         }
 
 

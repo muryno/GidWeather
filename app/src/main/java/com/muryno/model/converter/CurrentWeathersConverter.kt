@@ -4,7 +4,6 @@ import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.muryno.model.CurrentWeatherData
-import com.muryno.model.entity.Weather
 import java.util.*
 
 class CurrentWeathersConverter {

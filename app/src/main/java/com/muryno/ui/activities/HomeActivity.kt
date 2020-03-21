@@ -2,7 +2,7 @@ package com.muryno.ui.activities
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -13,13 +13,13 @@ import com.muryno.ui.base.BaseActivity
 import com.muryno.ui.interfaces.CustomItemClickListener
 import com.muryno.ui.viewmodel.HomeViewModel
 import com.muryno.utils.getArtResourceForWeatherCondition
-import com.muryno.utils.getDayName
-import com.muryno.utils.getFormattedDate
-import com.muryno.utils.getFriendlyDayString
+import com.muryno.utils.getCurrentDate
+
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_activity.*
 import java.lang.String
 
-class HomeActivity : AppCompatActivity(), CustomItemClickListener<CurrentWeatherData> {
+class HomeActivity : BaseActivity(), CustomItemClickListener<CurrentWeatherData> {
 
     private var adapter: WeatherAdapter? = null
 
@@ -31,11 +31,14 @@ class HomeActivity : AppCompatActivity(), CustomItemClickListener<CurrentWeather
         setContentView(R.layout.activity_main)
 
         subViews()
+
+
+
     }
 
     private fun subViews(){
 
-
+        //instantiating adapter
         adapter = WeatherAdapter(this)
         weather_RecyclerView.adapter = adapter
 
@@ -44,36 +47,59 @@ class HomeActivity : AppCompatActivity(), CustomItemClickListener<CurrentWeather
         //initialize view model
         viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
 
-        viewModel?.getCurrentWeather()?.observe(this, Observer {
+        //observe  weather data
+        viewModel?.getWeather?.observe(this, Observer {
             views(it)
         })
 
+        //observe next 5 days weather data and pass to adapter
         viewModel?.getSubWeather?.observe(this, Observer {
-            it?.currentWeathers?.let { it1 -> adapter?.swapData(it1) }
+            it?.weathers?.let { it1 -> adapter?.swapData(it1) }
+        })
+
+
+        viewModel?.loading?.observe(this, Observer {
+            progressDialog.visibility = View.VISIBLE
+
+        })
+
+
+        viewModel?.success?.observe(this, Observer {
+            progressDialog.visibility = View.GONE
         })
 
 
 
+        viewModel?.failure?.observe(this, Observer {
+            progressDialog.visibility = View.GONE
+        })
+
+
+        //search view
         toolbarSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 
             override fun onQueryTextSubmit(query: kotlin.String?): Boolean {
-                return false
-            }
-
-            override fun onQueryTextChange(newText: kotlin.String?): Boolean {
                 if (toolbarSearchView.query.isNotEmpty()) {
-
                     viewModel?.postQuery(toolbarSearchView.query.toString())
-
                 }
                 return false
             }
 
+            override fun onQueryTextChange(newText: kotlin.String?): Boolean {
+
+                return false
+            }
+
 
         })
-
     }
 
+
+
+
+
+
+    //item click
     override fun onItemClick(vararg args: CurrentWeatherData?) {
         if(args.isNotEmpty()) {
             val intent = Intent(this, DetailsActivity::class.java)
@@ -83,9 +109,10 @@ class HomeActivity : AppCompatActivity(), CustomItemClickListener<CurrentWeather
     }
 
 
-    fun views(dt : CurrentWeatherData?){
+    private fun views(dt : CurrentWeatherData?){
         txt_region.text = dt?.name ?: "Loading"
-        date_.text = dt?.dt?.toLong()?.let { getFriendlyDayString(it) } ?: "Today"
+        //because the time stamp return from the api is not correct, i had to improvise ussing current date
+        date_.text = getCurrentDate()
         txt_temp.text = String.format(getString(R.string.weather_degree), dt?.main?.temp ?: 0.0)
         img_icon.setImageResource(getArtResourceForWeatherCondition(dt?.weather?.get(0)?.id ?: 200))
         txt_forcast.text = dt?.weather?.get(0)?.main ?: "Loading"

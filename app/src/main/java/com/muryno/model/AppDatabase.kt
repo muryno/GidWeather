@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.muryno.MainApplication
 import com.muryno.model.dao.WeatherDao
 
-@Database(entities = [CurrentWeatherData::class,SubsequenceWeatherData::class], version = 3, exportSchema = false)
+@Database(entities = [CurrentWeatherData::class,SubsequenceWeatherData::class], version = 5, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun weatherDao(): WeatherDao?
 

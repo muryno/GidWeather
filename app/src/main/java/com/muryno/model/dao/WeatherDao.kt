@@ -20,8 +20,8 @@ interface WeatherDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun saveCurrentWeather(weather: List<CurrentWeatherData>)
 
-    @Query("SELECT * FROM current_weather_data where dt =:dt")
-    fun getCurrentWeather(dt : Int): LiveData<CurrentWeatherData>
+    @Query("SELECT * FROM current_weather_data where current_weather =:dt")
+    fun getCurrentWeather(dt:Int): LiveData<CurrentWeatherData>
 
 
 

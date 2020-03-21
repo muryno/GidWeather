@@ -17,15 +17,26 @@
 
         <TextView
 
+            android:id="@+id/txt_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:textColor="@color/white"
+            android:layout_marginBottom="4dp"
+            android:layout_centerHorizontal="true"
+            tools:text="Tues" />
+
+
+        <TextView
+
             android:id="@+id/txt_dat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
-            android:textAppearance="?android:textAppearanceLarge"
             android:textColor="@color/white"
             android:layout_marginBottom="10dp"
+            android:layout_below="@+id/txt_time"
             android:layout_centerHorizontal="true"
-
             tools:text="Tues" />
         <ImageView
             android:id="@+id/img"

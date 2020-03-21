@@ -78,4 +78,11 @@ class CurrentWeatherData  : Serializable{
     var rain: Rain? = null
 
 
+    @SerializedName("dt_txt")
+    @Expose
+    var dt_txt: String? = null
+
+
+    var current_weather: Int = 0
+
 }

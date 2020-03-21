@@ -47,7 +47,9 @@ class WeatherAdapter( private val listener: CustomItemClickListener<CurrentWeath
         holder.clou_condition.text = weath?.weather?.get(0)?.main
 
 
-        holder.txt_dat.text = weath?.dt?.toLong()?.let { getFriendlyDayString(it) }
+        holder.txt_time.text = getFormattedDate(weath?.dt_txt,time)
+
+        holder.txt_dat.text = getFormattedDate(weath?.dt_txt,day)
 
         holder.img_icon.setImageResource(getArtResourceForWeatherCondition(weath?.weather?.get(0)?.id ?: 200))
     }
@@ -56,6 +58,8 @@ class WeatherAdapter( private val listener: CustomItemClickListener<CurrentWeath
 
         val clou_condition: TextView = itemView.clou_condition
         val txt_dat : TextView = itemView.txt_dat
+        val txt_time : TextView = itemView.txt_time
+
 
         val img_icon : ImageView = itemView.img
 

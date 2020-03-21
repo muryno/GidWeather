@@ -7,7 +7,6 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import com.muryno.model.converter.CityConverter
 import com.muryno.model.converter.CurrentWeathersConverter
-import com.muryno.model.converter.WeathersConverter
 import com.muryno.model.entity.*
 import java.io.Serializable
 
@@ -27,7 +26,7 @@ class SubsequenceWeatherData  : Serializable{
     @TypeConverters(CurrentWeathersConverter::class)
     @SerializedName("list")
     @Expose
-    var currentWeathers: ArrayList<CurrentWeatherData>? = null
+    var weathers: ArrayList<CurrentWeatherData>? = null
 
 
 
