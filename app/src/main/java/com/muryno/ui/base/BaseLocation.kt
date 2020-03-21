@@ -1,7 +1,6 @@
 package com.muryno.ui.base
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -12,7 +11,6 @@ import android.os.Bundle
 import android.os.Looper
 import android.provider.Settings
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
@@ -52,7 +50,7 @@ abstract class BaseLocation :Activity(){
                         MemoryManager().getInstance()?.saveLocation(LatLng(  location.latitude,location.longitude))
 
                         /**Go to home activity**/
-                        checkLocation()
+                        moveTOHomePage()
                     }
                 }
             } else {
@@ -92,7 +90,7 @@ abstract class BaseLocation :Activity(){
             MemoryManager().getInstance()?.saveLocation(LatLng(  mLastLocation.latitude,mLastLocation.longitude))
 
             /**Go to home activity**/
-            checkLocation()
+            moveTOHomePage()
 
         }
     }
@@ -136,7 +134,7 @@ abstract class BaseLocation :Activity(){
         }
     }
 
-    private fun checkLocation() {
+    private fun moveTOHomePage() {
 
         val intent = Intent(MainApplication.instance, HomeActivity::class.java)
         startActivity(intent)

@@ -2,7 +2,9 @@ package com.muryno.utils
 
 import android.content.Context
 import android.net.ConnectivityManager
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import com.muryno.MainApplication
 import com.muryno.R
 import java.text.ParseException
@@ -10,6 +12,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
+@RequiresApi(Build.VERSION_CODES.M)
 fun isOnline(): Boolean {
 
     if (MainApplication.instance?.applicationContext == null)
@@ -27,8 +30,7 @@ fun isOnline(): Boolean {
 
 
 
-fun formatTemperature(
-    temperature: Double): String? {
+fun formatTemperature(temperature: Double): String? {
     // For presentation, assume the user doesn't care about tenths of a degree.
     return MainApplication.instance?.getString(R.string.format_temperature)?.let { String.format(it, temperature * 1.8 + 32) }
 }
@@ -53,13 +55,13 @@ fun getFormattedDate( dt : String?,id : Int) : String{
     val inputFormat = "yyyy-MM-dd HH:mm"
     val outputFormatTime = "EEE dd MMM HH:mm"
     val DATE_TIME_ONLY = SimpleDateFormat(outputFormatTime, Locale.getDefault())
-    if (dt != "") {
+    if (!dt.isNullOrEmpty()) {
         try {
             val parseDate = SimpleDateFormat(inputFormat, Locale.getDefault()).parse(dt)
            val  clean = DATE_TIME_ONLY.format(parseDate)
             //"Sat Mar 21 03:00"
             val days =   clean.split(" ")[0]
-            val months =   clean.split(" ")[1] + clean.split(" ")[2]
+            val months =   clean.split(" ")[1]+" " + clean.split(" ")[2]
             val times = clean.split(" ")[3]
           return  when(id){
                 day->{days}
@@ -74,7 +76,7 @@ fun getFormattedDate( dt : String?,id : Int) : String{
             Log.e("FormatFormDate", Log.getStackTraceString(e))
         }
     }
-    return ""
+    return " "
 }
 
 
@@ -112,7 +114,7 @@ fun getArtResourceForWeatherCondition(weatherId: Int): Int {
     }
 
 
-    return -1
+     return R.drawable.art_clouds
 }
 
 
